@@ -1,3 +1,4 @@
+
 var work = {
 	"jobs": [
 	{
@@ -12,7 +13,7 @@ var work = {
 		"title": "Tester",
 		"location": "Moscow, Russia",
 		"dates": "2012 - 2014",
-		"description": "Testing of financial backoffice system"
+		"description": "Testing of the financial backoffice system"
 	}]
 };
 
@@ -22,7 +23,7 @@ var projects = {
 		"title": "Cookies",
 		"dates": "1970 - Current Time",
 		"description": "Give me a cookie",
-		"images": "http://rack.2.mshcdn.com/media/ZgkyMDEzLzEwLzA3L2JmL0Nvb2tpZU1vbnN0LmE4NjZlLmpwZwpwCXRodW1iCTIwMHgxMTUjCmUJanBn/26cc40cf/9eb/CookieMonster.jpg"
+		"images": ["http://rack.2.mshcdn.com/media/ZgkyMDEzLzEwLzA3L2JmL0Nvb2tpZU1vbnN0LmE4NjZlLmpwZwpwCXRodW1iCTIwMHgxMTUjCmUJanBn/26cc40cf/9eb/CookieMonster.jpg"]
 	}
 	]
 };
@@ -68,13 +69,65 @@ var education = {
 	}]
 };
 
+$("#header").prepend(HTMLheaderRole.replace("%data%", bio.role));
+$("#header").prepend(HTMLheaderName.replace("%data%", bio.name));
+$("#header").prepend(HTMLbioPic.replace("%data%", bio.image));
+
+if(bio.skills) {
+	$("#header").append(HTMLskillsStart);
+	//for(var i = 0; i < bio.skills.length; i++) {
+	for(i in bio.skills) {
+		$("#skills").append(HTMLskills.replace("%data%", bio.skills[i]));
+	}
+	
+}
 
 
+function displayWork(){
+	for(job in work.jobs) {
+		$("#workExperience").append(HTMLworkStart);
+		var formattedEmployerTitle = HTMLworkEmployer.replace("%data%", work.jobs[job].employer) + 
+									HTMLworkTitle.replace("%data%", work.jobs[job].title);
+		$(".work-entry:last").append(formattedEmployerTitle);
+		$(".work-entry:last").append(HTMLworkLocation.replace("%data%", work.jobs[job].location));
+		$(".work-entry:last").append(HTMLworkDates.replace("%data%", work.jobs[job].dates));
+		$(".work-entry:last").append(HTMLworkDescription.replace("%data%", work.jobs[job].description));
+
+	}
+}
+
+displayWork();
+
+$("#main").append(internationalizeButton);
+
+function inName(string) {
+	var splitted = string.split(" ");
+	splitted[0] = splitted[0].slice(0, 1).toUpperCase() + splitted[0].slice(1).toLowerCase();
+	splitted[1] = splitted[1].toUpperCase();
+	return splitted.join(" ");
+}
 
 
+projects.display = function() {
+	for (project in projects.projects) {
+		$("#projects").append(HTMLprojectStart);
 
+		var formattedTitle = HTMLprojectTitle.replace("%data%", projects.projects[project].title);
+		$(".project-entry:last").append(formattedTitle);
 
+		var formattedDates = HTMLprojectDates.replace("%data%", projects.projects[project].dates);
+		$(".project-entry:last").append(formattedDates);
 
+		var formattedDescription = HTMLprojectDescription.replace("%data%", projects.projects[project].description);
+		$(".project-entry:last").append(formattedDescription);
 
+		if (projects.projects[project].images.length > 0) {
+			for (image in projects.projects[project].images) {
+				var formattedImage = HTMLprojectImage.replace("%data%", projects.projects[project].images[image]);
+				$(".project-entry:last").append(formattedImage);
+			}
+		}
+	}
+}
 
-
+projects.display();
